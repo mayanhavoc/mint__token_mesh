@@ -1,38 +1,105 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Mesh multi-sig transaction demo
 
-## Getting Started
+At the end of this tutorial you will be able to:
 
-First, run the development server:
+- Connect wallet
+- Mint a token that belongs to you
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+## Getting started
+
+The first thing you want to do is check out the [nextjs starter guide](https://meshjs.dev/guides/nextjs) to find out how to get started.
+
+What you will need before getting started:
+
+- An IDE
+- NodeJs
+
+Both can be downloaded through the link provided above.
+
+### Step 1 - Creating a new NextJS application
+
+Create a new NextJs project:
+
+`npx create-next-app@latest --typescript .`
+
+### Step 2 - Installing Mesh
+
+Install MeshJS package
+
+`npm install @meshsdk/core @meshsdk/react`
+
+#### Mesh core and Mesh react
+
+Mesh is divided into two main parts:
+
+- Mesh core: contains all the core functionalities around bulding a transaction, connecting to wallets, etc.
+- Mesh react: contains the React components and hooks.
+
+### Step 3 - WebAssembly configuration
+
+WebAssembly is used by Mesh behind the scenes, so it is important that we tell our NextJs application that we are using it by adding the following lines to the configuration file (i.e., next.config.js).
+
+Add webpack configuration in `next.config.js`:
+
+```ts
+/** @type {import('next').NextConfig} */
+
+const nextConfig = {
+  reactStrictMode: true,
+  webpack: function (config, options) {
+    config.experiments = {
+      asyncWebAssembly: true,
+      layers: true,
+    };
+    return config;
+  },
+};
+module.exports = nextConfig;
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Test that your application runs properly using the terminal command `npm run dev` to run a development server.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Step 4
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Delete unnecesary code on your `/pages/index.tsx` and `/pages/_app.tsx` files. It should look like this:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+<!-- /pages/index.tsx -->
+```tsx
+export default function Home(){
+  return (
+    <>
+    </>
+  )
+}
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+<!-- /pages/_app_.tsx -->
+```tsx
+function MyApp() {
+  return (
+   
+  );
+}
 
-## Learn More
+export default MyApp;
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Step 5 - Browser wallet
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Head on to [Browser wallet](https://meshjs.dev/apis/browserwallet). Browser wallet is a wallet API that allows our application to communicate with the user's wallet. It is built in accordance with [CIP-30](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0030).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Once the user's wallet is connected, you will be able to:
 
-## Deploy on Vercel
+- Get the wallet's balance `getBalance()`
+- Get the wallet's address `getChangeAddress()`
+- Get the wallet's network ID (this ID will help determine if it's on the mainnet or testnet) `getNetworkId()`
+- Get the wallet's reward address (for staking) `getRewardAddresses()`
+- Get the wallet's utxos `getUtxos()`, and
+- Prompt the user to sign a transaction `signTx()`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This are just a few methods available from `BrowserWallet`, to get the complete list, head over to the documentation by clicking on the link at the start of this step.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Step 6 - Set up the Mesh provider
+
+Head over to the [Getting started with Mesh and React](https://meshjs.dev/react/getting-started) section to find the instructions to install `@meshsdk/react`
+
