@@ -86,16 +86,18 @@ export default MyApp;
 
 ### Step 5 - Browser wallet
 
+The `BrowserWallet` connects, queries and performs wallet functions in accordance to [CIP-30](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0030)
+
 Head on to [Browser wallet](https://meshjs.dev/apis/browserwallet). Browser wallet is a wallet API that allows our application to communicate with the user's wallet. It is built in accordance with [CIP-30](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0030).
 
 Once the user's wallet is connected, you will be able to:
 
-- Get the wallet's balance `getBalance()`
-- Get the wallet's address `getChangeAddress()`
-- Get the wallet's network ID (this ID will help determine if it's on the mainnet or testnet) `getNetworkId()`
-- Get the wallet's reward address (for staking) `getRewardAddresses()`
-- Get the wallet's utxos `getUtxos()`, and
-- Prompt the user to sign a transaction `signTx()`
+- Get the wallet's balance `getBalance()`: This returns a list of assets in the wallet.
+- Get the wallet's address `getChangeAddress()`: Returns an address owned by the wallet that should be used as a change address to return leftover assets during transaction creation back to the connected wallet.
+- Get the wallet's network ID (this ID will help determine if it's on the mainnet or testnet) `getNetworkId()`: Returns the network ID of the currently connected account. `0` is testnet and `1` is mainnet, but other networks can possibly returned that are not governed by CIP-30.The result of this function will stay the same unless the connected account is changed.
+- Get the wallet's reward address (for staking) `getRewardAddresses()`: Returns a list of reward addresses (i.e. stake address) owned by the wallet.
+- Get the wallet's utxos `getUtxos()`: Returns a list of all UTxOs controlled by the wallet. ADA balance and multiasset value in each UTxO are specified in `amount`.
+- Prompt the user to sign a transaction `signTx()`: Requests user to sign the provided transaction (`tx`). The wallet should ask the user for permission, and if given, try to sign the supplied body and return a signed transaction. `partialSign` should be `true` if the transaction provided requires multiple signatures.
 
 This are just a few methods available from `BrowserWallet`, to get the complete list, head over to the documentation by clicking on the link at the start of this step.
 
